@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ResNet50 Image Classifier</title>
+    <style>
+      button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        margin-top: 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #0062cc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ResNet50 Image Classifier</h1>
+    <form action="/" method="POST">
+      <input type="file" name="image">
+      <button type="submit">Submit</button>
+    </form>
+    <div id="prediction"></div>
+    <script>
+      var form = document.querySelector('form');
+      var predictionDiv = document.getElementById('prediction');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/', true);
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            var prediction = response['class'];
+            predictionDiv.innerHTML = 'Prediction: ' + prediction;
+          } else {
+            console.log('Error:', xhr.statusText);
+          }
+        };
+        xhr.onerror = function() {
+          console.log('Error:', xhr.statusText);
+        };
+        xhr.send(formData);
+      });
+    </script>
+  </body>
+</html>
